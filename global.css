@@ -1,0 +1,76 @@
+main {
+  text-align: center;
+  font-family: sans-serif;
+}
+
+#score,
+#fps,
+#attempts {
+  font-family: "Courier New", Courier, monospace;
+  color: rgba(255, 98, 234, 0.89);
+}
+h1 {
+  font-family: "Courier New", Courier, monospace;
+  color: rgba(255, 98, 234, 0.89);
+  font-size: 40px;
+  text-decoration: underline 5px;
+}
+
+body {
+  background-image: url("bg.png");
+}
+#game {
+  display: flex;
+  margin: auto;
+  border-radius: 10px;
+  border: rgb(116, 91, 91) solid 1px;
+  box-shadow: rgb(0, 0, 0, 0.5) 0 0 5px;
+  background-color: rgba(234, 149, 255, 0.849);
+}
+
+.brick {
+  fill: rgba(24, 171, 240, 0.87);
+  stroke: rgb(3, 108, 156);
+  stroke-width: 3px;
+}
+
+#platform {
+  fill: rgb(148, 106, 247);
+  stroke: black;
+  stroke-width: 1px;
+}
+
+#ball {
+  fill: rgb(255, 251, 0);
+  stroke: black;
+  stroke-width: 1px;
+  position: relative;
+}
+
+#pauseBtn {
+  background-color: #4caf50;
+  display: none;
+}
+
+#startBtn {
+  display: inline;
+}
+#infoBoard {
+  fill: rgba(24, 171, 240, 0.87);
+  stroke-width: 3;
+  stroke: rgb(0, 0, 0);
+}
+.infoText {
+  font-family: "Courier New", Courier, monospace;
+  color: rgba(255, 98, 234, 0.89);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pauseText {
+  font-family: "Courier New", Courier, monospace;
+  color: rgba(255, 98, 234, 0.89);
+  font-size: 20px;
+  font-weight: bold;
+  display: none;
+}
