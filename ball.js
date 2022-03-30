@@ -1,6 +1,5 @@
 let points = 0
 export {points}
-
 export default class Ball {
     constructor(ballElem, ballSpeed, gameHeight, gameWidth) {
         this.ballElem = ballElem
@@ -28,10 +27,15 @@ export default class Ball {
         return this.ballElem.getBBox()
     }
 
-    reset () {
-        this.handlePoints()
+    reset (gameOverCondition = false) {
+        if (gameOverCondition) {
+            points = 0
+        } else {
+            this.handlePoints()
+        }
+
         this.cx = 640
-        this.cy = 320
+        this.cy = 650
         this.direction = { cy:0 }
         while   (
             Math.abs(this.direction.cy) <= 0.4 || 
@@ -40,13 +44,17 @@ export default class Ball {
             const heading = randomNumberBetween(0, 2 * Math.PI)
             this.direction = { cy: Math.cos(heading), cx: Math.sin(heading)}
         }
-        if (this.direction.cy < 0) this.direction.cy *= -1 // sending first ball down
     }
     update(delta, paddleObj, bricks) {
-        if (delta > 200) delta = 16   // done for opportunity to pause game ?????
+        // if (delta > 200) delta = 16   // done for opportunity to pause game ?????
         this.cx += this.direction.cx * delta * this.ballSpeed
         this.cy += this.direction.cy * delta * this.ballSpeed
         const ballObj = this.ballObj()
+        const ballTop       = ballObj.y
+        const ballBottom    = ballObj.y + ballObj.height
+        const ballLeft      = ballObj.x
+        const ballRight     = ballObj.x + ballObj.width
+
         // part for checking boundaries
         if (this.cx - this.r < 0 || this.cx + this.r > this.gameWidth) {
           this.direction.cx *= -1
@@ -56,50 +64,64 @@ export default class Ball {
         }
         // part for checking paddle
         if (this.checkPaddle(ballObj, paddleObj)) {
+            if(ballObj.y + ballObj.height + 50 > ballObj.y){ 
+                if(ballObj.x + ballObj.width - ballObj.x < 20) {     // ball on the left side of paddle
+                    this.cx -= 20
+                    this.direction.cx *= -1 
+                    this.direction.cy *= -1
+                } else if(paddleObj.x + paddleObj.width - ballObj.x <= 20) { // ball on the right side of paddle 
+                    this.cx += 20
+                    this.direction.cx *= -1
+                    this.direction.cy *= -1 
+                } 
+            }
             this.direction.cy *= -1
         }
-        // part for checking collisions with bricks
-        if (bricks.length === 0) {
-            alert("YOU WIN, CONGRATULATIONS!")
+        for (let i = 0 ; i < bricks.length; i++) {
+            let brickObj = bricks[i].getBBox()
+            const brickTop      = brickObj.y
+            const brickBottom   = brickObj.y + brickObj.height
+            const brickLeft     = brickObj.x
+            const brickRight    = brickObj.x + brickObj.width
 
-        } else {
-            for (let i = 0 ; i < bricks.length; i++) {
-                let brickObj = bricks[i].getBBox()
-                if (this.checkBricks(ballObj, brickObj)) {
-                    this.direction.cy *= -1
-                    bricks[i].style.display = 'none'
-                    this.ballSpeed += 0.01
-                    points += 10
+            if(
+                ballBottom < brickTop || 
+                ballLeft > brickRight || 
+                ballTop > brickBottom || 
+                ballRight < brickLeft) {
+                    continue
                 }
-            }
+                bricks[i].style.display = 'none'
+                points += 10                
+                // bottom
+                if(Math.abs(ballTop - brickBottom) <= 10 && this.direction.cy < 0 && 
+                    ((ballRight - brickLeft >= Math.abs(brickBottom - ballTop)) 
+                    || (brickRight - ballLeft >= brickBottom - ballTop)))
+                { this.direction.cy *= -1
+                    // top
+                } else if (Math.abs(brickTop - ballBottom) <=10 && this.direction.cy > 0 && 
+                    ((ballRight - brickLeft >= ballBottom - brickTop) 
+                    || (brickRight - ballLeft > ballBottom - brickTop))){
+                    this.direction.cy *= -1 
+                // left 
+                } else if (ballRight >= brickLeft && this.direction.cx > 0 && 
+                    ((brickBottom - ballTop > Math.abs(ballRight - brickLeft)) 
+                    || (ballBottom - brickTop > ballRight - brickLeft))){
+                    this.direction.cx *= -1
+                // right
+                } else this.direction.cx *= -1
         }
-
     }
     checkPaddle (ballObj, paddleObj) {
-        return ballObj.y + ballObj.height > paddleObj.y && 
-        ballObj.y < paddleObj.y && 
-        ballObj.x + this.r > paddleObj.x && 
-        ballObj.x + this.r < paddleObj.x + paddleObj.width
-    }
-
-    checkBricks(ballObj, brickObj) {
-            if (this.direction.cy < 0) {
-                // ball going up
-                return ballObj.y + ballObj.height > brickObj.y && 
-                ballObj.y < brickObj.y + brickObj.height &&  
-                ballObj.x > brickObj.x && 
-                ballObj.x + ballObj.width < brickObj.x + brickObj.width
-            }
-            if (this.direction.cy > 0) {
-                // ball going down
-                return ballObj.y+ballObj.height > brickObj.y && 
-                ballObj.y < brickObj.y + brickObj.height && 
-                ballObj.x > brickObj.x && 
-                ballObj.x + ballObj.width < brickObj.x + brickObj.width
-            }
+        return (
+            ballObj.x                       <= paddleObj.x + paddleObj.width  && // BALL LEFT   rect1.left <= rect2.right
+            ballObj.x + ballObj.width       >= paddleObj.x &&                    // BALL RIGHT   rect1.right >= rect2.left
+            ballObj.y                       <= paddleObj.y + paddleObj.height && // BALL TOP    rect1.top <= rect2.bottom
+            ballObj.y + ballObj.height      >= paddleObj.y                       // BALL BOTTOM rect1.bottom >= rect2.top
+        )
     }
     handlePoints() {
-        if (points > 0) points -= 50
+        if (points > 0) points -= 30
         if (points < 0) points = 0
     }
 }

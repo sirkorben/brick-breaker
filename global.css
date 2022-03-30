@@ -4,6 +4,7 @@ main {
 }
 
 #score,
+#timer,
 #fps,
 #attempts {
   font-family: "Courier New", Courier, monospace;
@@ -68,6 +69,22 @@ body {
 }
 
 .pauseText {
+  font-family: "Courier New", Courier, monospace;
+  color: rgba(255, 98, 234, 0.89);
+  font-size: 20px;
+  font-weight: bold;
+  display: none;
+}
+
+.winText {
+  font-family: "Courier New", Courier, monospace;
+  color: rgba(255, 98, 234, 0.89);
+  font-size: 20px;
+  font-weight: bold;
+  display: none;
+}
+
+.loseText {
   font-family: "Courier New", Courier, monospace;
   color: rgba(255, 98, 234, 0.89);
   font-size: 20px;
