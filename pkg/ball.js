@@ -1,5 +1,8 @@
 let points = 0
+
+
 export {points}
+
 export default class Ball {
     constructor(ballElem, ballSpeed, gameHeight, gameWidth) {
         this.ballElem = ballElem
@@ -63,7 +66,7 @@ export default class Ball {
         // part for checking paddle
         if (this.checkPaddle(ballObj, paddleObj)) {
             if(ballObj.y + ballObj.height + 50 > paddleObj.y){ 
-                if(ballObj.x + ballObj.width - ballObj.x < 20) {     // ball on the left side of paddle
+                if(ballObj.x + ballObj.width - paddleObj.x < 20) {     // ball on the left side of paddle
                     this.cx -= 20
                     this.direction.cx *= -1 
                     this.direction.cy *= -1
@@ -91,7 +94,9 @@ export default class Ball {
                 }
                 bricks[i].style.display = 'none'
                 this.ballSpeed += 0.01
-                points += 10                
+                points += 10       
+                       
+
                 // bottom
                 if(Math.abs(ballTop - brickBottom) <= 10 && this.direction.cy < 0 && 
                     ((ballRight - brickLeft >= Math.abs(brickBottom - ballTop)) 

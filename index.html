@@ -9,25 +9,71 @@
 
 <body>
     <main>
-        <h1>Make Your Game</h1>
+        <div class="game-title">
+            <div class="text">
+                <span style="--i:1">B</span>
+                <span style="--i:2">r</span>
+                <span style="--i:3">e</span>
+                <span style="--i:4">a</span>
+                <span style="--i:5">k</span>
+                <span style="--i:6">o</span>
+                <span style="--i:7">u</span>
+                <span style="--i:8">t</span>
+            </div>
+
+        </div>
+        <!--Score Board-->
+        <div class="score">
+            <img src="./img/scores.png" width="23" height="23" alt="score"><label id="score">:0</label><br>
+            <img src="./img/heart.png" alt="heart" width="23" height="23"><label id="lives">:3</label><br>
+
+            <img src="./img/timer.png" alt="timer" width="23" height="23"><label id="timer">:</label><br>
+            <img src="./img/frame.png" alt="fps" width="23" height="23"><label id="FPS">:</label><br>
+
+        </div>
+        <!--Welcome message-->
+        <div id="infoBoard" class="infoBoard">
+            <div class="infoText">
+                <h2>Welcome to the Breakout!</h2>
+                <div class="controls">
+                    <label>s - start</label><br>
+                    <label>p - pause</label><br>
+                    <label>r - restart</label><br>
+                    <label>a - left</label><br>
+                    <label>d - right</label>
+                </div>
+            </div>
+        </div>
+        <!--Pause Board-->
+        <div class="pauseBoard" id="pauseBoard">
+            <h2>Game is paused</h2>
+            <div class="pauseText">
+                <label>Press s to continue</label><br>
+                <label>Press r to restart</label>
+            </div>
+        </div>
+        <!--Lose message-->
+        <div class="loseBoard" id="loseBoard">
+            <h2>You lost!</h2>
+            <div class="loseText">
+                <label>Play again? - y</label><br>
+                <label>Quit - n</label>
+            </div>
+        </div>
+
+        <!--Win message-->
+        <div class="winBoard" id="winBoard">
+            <h2>Congratulations, You Won!</h2>
+            <div class="winText">
+                <label class="winText"></label><br>
+                <label>Play again? - y</label><br>
+                <label>Quit - n</label>
+            </div>
+        </div>
         <svg id="game" height="720" width="1280">
-            <text id="score" x="10" y="710">score: 0</text>
-            <text id="fps" x="270" y="710">fps </text>
-            <text id="timer" x="350" y="710">timer: </text>
-            <text id="attempts" x="130" y="710">attempts: 3</text>
+
             <circle id="ball" cx="640" cy="670" r="15"></circle>
-            <rect id="platform" x="540" y="670" width="200" height="15"></rect>
-            <rect id="infoBoard" x="350" y="250" width="580" height="170"></rect>
-            <text class="infoText" x="410" y="295">hello and welcome to the Brick Breaker!</text>
-            <text class="infoText" x="420" y="335"> s - for start, p - pause, r - restart</text>
-            <text class="infoText" x="440" y="375">move platform by using a and d </text>
-            <text class="pauseText" x="420" y="295">paused. press s - to continue</text>
-            <text class="pauseText" x="420" y="335">r - to restart the game</text>
-            <text class="winText" x="410" y="295">congrats. you have won</text>
-            <text class="winText" id="scoreAttempts" x="420" y="335"></text>
-            <text class="winText" x="410" y="375">play again? y - yes, n - no</text>
-            <text class="loseText" x="410" y="295">sad. game lost</text>
-            <text class="loseText" x="420" y="335">play again? y - yes, n - no</text>
+            <rect id="platform" rx="10" ry="10" x="540" y="670" width="200" height="15"></rect>
 
             <rect class="brick" id="brick0" x="110" y="40" width="80" height="30" rx="5"></rect>
             <rect class="brick" id="brick1" x="230" y="40" width="80" height="30" rx="5"></rect>

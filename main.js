@@ -1,22 +1,27 @@
-import Ball, { points as score } from './ball.js'
-import InputHandler from './input.js'
-import Paddle from './paddle.js'
-
+import Ball, { points as score} from './pkg/ball.js'
+import InputHandler from './pkg/input.js'
+import Paddle from './pkg/paddle.js'
+//console.log(totalBricks,points)
 const game = document.getElementById('game')
 const gameWindowHeight = game.getAttribute('height')
 const gameWindowWidth = game.getAttribute('width')
-const framesNmbr = document.getElementById('fps')
+const framesNmbr = document.getElementById('FPS')
 const timer = document.getElementById('timer')
 const infoText = Array.from(document.getElementsByClassName('infoText'))
 const pauseText = Array.from(document.getElementsByClassName('pauseText'))
 const winText = Array.from(document.getElementsByClassName('winText'))
 const loseText = Array.from(document.getElementsByClassName('loseText'))
 const infoBoard = document.getElementById('infoBoard')
+const pauseBoard = document.getElementById('pauseBoard')
+const loseBoard = document.getElementById('loseBoard')
+const winBoard = document.getElementById('winBoard')
+
 
 let gameOverBool = false
 let ballSpeed = 0.4
 let attempts = 3
-let timeCounter = 0
+let timerSeconds = 0
+let timerMinutes = 0
 let lastTime, secondsPassed, fps, rafID, avarageDelta
 let state = {
     pressedKeys: {
@@ -45,8 +50,9 @@ const bricks = Array.from(document.getElementsByClassName('brick'))
 new InputHandler(state)
 
 const gameLoop = (timestamp) => {
-    document.getElementById('score').innerHTML = 'score: ' + score
-    document.getElementById('attempts').innerHTML = 'attempts: ' + attempts
+    document.getElementById('score').innerHTML = ': '+score
+    document.getElementById('lives').innerHTML = ': '+attempts
+   
     if (lastTime != null){
         // reassigning lastTime if game was paused
         lastTime = showFps(timestamp, lastTime)
@@ -76,16 +82,40 @@ const showFps = (timestamp, lastTime) => {
     }
     secondsPassed = (timestamp - lastTime) / 1000
     fps = Math.round(1 / secondsPassed)
-    framesNmbr.innerHTML = 'fps: ' + fps
-    timeCounter +=secondsPassed
-    timer.innerHTML = 'time : ' + Math.round(timeCounter)
+    framesNmbr.innerHTML = ': ' + fps + ' fps'
+    // timeCounter +=secondsPassed
+    // timer.innerHTML = ':' + Math.round(timeCounter)
+    timerHandler(secondsPassed)
     return lastTime
 }
 
+const timerHandler = (secondsPassed) => {
+    timerSeconds +=secondsPassed
+    let secondToPrint
+    let minuteToPrint
+    if (Math.round(timerSeconds) != 0 && Math.round(timerSeconds) % 60 === 0) {
+        timerMinutes++
+        timerSeconds = 0
+    }
+
+    if (Math.round(timerSeconds) <= 9 ) {
+        secondToPrint = '0' + Math.round(timerSeconds)
+    } else {
+        secondToPrint = Math.round(timerSeconds)
+    }
+
+    if (timerMinutes <= 9) {
+        minuteToPrint = '0' + timerMinutes
+    } else {
+        minuteToPrint = timerMinutes
+    }
+        timer.innerHTML = ': ' + minuteToPrint +':' + secondToPrint
+
+}
+
 const winCase = () => {
-    const withAttemt = 4 - attempts
-    winText[1].innerHTML = `you scored ${score} points, in ${state.attempts[withAttemt]} attempt`
-    infoBoard.style.display = 'inline'
+    winText[1].innerHTML = `Your score: ${score}`
+    winBoard.style.display = 'inline'
     winText.forEach(el => el.style.display = 'inline')
     state.controlKeys.p = false
     state.controlKeys.y = true
@@ -104,7 +134,7 @@ const handleBallDown = () => {
 
 const gameOver = () => {
     cancelAnimationFrame(rafID)
-    infoBoard.style.display = 'inline'
+    loseBoard.style.display = 'inline'
     loseText.forEach(el => el.style.display = 'inline')
     state.controlKeys.p = false
     state.controlKeys.y = true
@@ -144,6 +174,9 @@ document.addEventListener('keydown', (e) => {
 
 const startGamePressed = () => {
     infoBoard.style.display = 'none'
+    pauseBoard.style.display = 'none'
+    loseBoard.style.display = 'none'
+    winBoard.style.display = 'none'
     infoText.forEach(el => el.style.display = 'none')
     pauseText.forEach(el => {
         el.style.display = 'none'
@@ -154,7 +187,7 @@ const startGamePressed = () => {
 }
 
 const pauseGamePressed = () => {
-    infoBoard.style.display = 'inline'
+    pauseBoard.style.display = 'inline'
     pauseText.forEach(text => text.style.display = 'inline')
     cancelAnimationFrame(rafID)
     state.controlKeys.s = false
@@ -165,12 +198,15 @@ const restartGame = () => {
 }
 
 const resetGameConditions = () => {
-    timeCounter = 0
+    timerSeconds = 0
+    timerMinutes = 0
     attempts = 3
     ball.reset(gameOverBool = true, ballSpeed)
     paddle.reset()
     bricks.forEach(brick => brick.style.display = 'inline')
     infoBoard.style.display = 'none'
+    loseBoard.style.display = 'none'
+    winBoard.style.display = 'none'
     loseText.forEach(el => el.style.display = 'none')
     winText.forEach(el => el.style.display = 'none')
     state.controlKeys.y = false
