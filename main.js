@@ -29,6 +29,12 @@ let state = {
         p: false,   // pause
         y: false,   // yes
         n: false,    // no
+    },
+    attempts : {
+        1: 'one',
+        2: 'second',
+        3: 'third'
+
     }
 }
 
@@ -78,7 +84,7 @@ const showFps = (timestamp, lastTime) => {
 
 const winCase = () => {
     const withAttemt = 4 - attempts
-    winText[1].innerHTML = `you scored ${score} points, with ${withAttemt} attempt(s)`
+    winText[1].innerHTML = `you scored ${score} points, in ${state.attempts[withAttemt]} attempt`
     infoBoard.style.display = 'inline'
     winText.forEach(el => el.style.display = 'inline')
     state.controlKeys.p = false
@@ -155,24 +161,13 @@ const pauseGamePressed = () => {
 }
 
 const restartGame = () => {
-    timeCounter = 0
-    cancelAnimationFrame(rafID)
-    bricks.forEach(brick => brick.style.display = 'inline')
-    infoBoard.style.display = 'inline'
-    infoText.forEach(el => el.style.display = 'inline')
-    pauseText.forEach(el => el.style.display = 'none')
-    attempts = 3
-    ball.reset(gameOverBool = true)
-    paddle.reset()
-    state.controlKeys.p = false
-    state.controlKeys.r = false
-    state.controlKeys.s = false
+    document.location.reload()
 }
 
 const resetGameConditions = () => {
     timeCounter = 0
     attempts = 3
-    ball.reset(gameOverBool = true)
+    ball.reset(gameOverBool = true, ballSpeed)
     paddle.reset()
     bricks.forEach(brick => brick.style.display = 'inline')
     infoBoard.style.display = 'none'

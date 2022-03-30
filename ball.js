@@ -27,9 +27,10 @@ export default class Ball {
         return this.ballElem.getBBox()
     }
 
-    reset (gameOverCondition = false) {
+    reset (gameOverCondition = false, bSpeed) {
         if (gameOverCondition) {
             points = 0
+            this.ballSpeed = bSpeed
         } else {
             this.handlePoints()
         }
@@ -46,9 +47,6 @@ export default class Ball {
         }
     }
     update(delta, paddleObj, bricks) {
-        // if (delta > 200) delta = 16   // done for opportunity to pause game ?????
-        this.cx += this.direction.cx * delta * this.ballSpeed
-        this.cy += this.direction.cy * delta * this.ballSpeed
         const ballObj = this.ballObj()
         const ballTop       = ballObj.y
         const ballBottom    = ballObj.y + ballObj.height
@@ -56,10 +54,10 @@ export default class Ball {
         const ballRight     = ballObj.x + ballObj.width
 
         // part for checking boundaries
-        if (this.cx - this.r < 0 || this.cx + this.r > this.gameWidth) {
+        if (ballObj.x <= 0 || ballObj.x + ballObj.width >= this.gameWidth) {
           this.direction.cx *= -1
         }
-        if (this.cy - this.r < 0) {
+        if (ballObj.y <= 0) {
             this.direction.cy *= -1
         }
         // part for checking paddle
@@ -92,6 +90,7 @@ export default class Ball {
                     continue
                 }
                 bricks[i].style.display = 'none'
+                this.ballSpeed += 0.01
                 points += 10                
                 // bottom
                 if(Math.abs(ballTop - brickBottom) <= 10 && this.direction.cy < 0 && 
@@ -111,6 +110,8 @@ export default class Ball {
                 // right
                 } else this.direction.cx *= -1
         }
+        this.cx += this.direction.cx * delta * this.ballSpeed
+        this.cy += this.direction.cy * delta * this.ballSpeed
     }
     checkPaddle (ballObj, paddleObj) {
         return (
