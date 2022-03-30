@@ -1,7 +1,7 @@
 import Ball, { points as score} from './pkg/ball.js'
 import InputHandler from './pkg/input.js'
 import Paddle from './pkg/paddle.js'
-//console.log(totalBricks,points)
+
 const game = document.getElementById('game')
 const gameWindowHeight = game.getAttribute('height')
 const gameWindowWidth = game.getAttribute('width')
@@ -15,7 +15,6 @@ const infoBoard = document.getElementById('infoBoard')
 const pauseBoard = document.getElementById('pauseBoard')
 const loseBoard = document.getElementById('loseBoard')
 const winBoard = document.getElementById('winBoard')
-
 
 let gameOverBool = false
 let ballSpeed = 0.4
@@ -83,8 +82,6 @@ const showFps = (timestamp, lastTime) => {
     secondsPassed = (timestamp - lastTime) / 1000
     fps = Math.round(1 / secondsPassed)
     framesNmbr.innerHTML = ': ' + fps + ' fps'
-    // timeCounter +=secondsPassed
-    // timer.innerHTML = ':' + Math.round(timeCounter)
     timerHandler(secondsPassed)
     return lastTime
 }
@@ -97,20 +94,17 @@ const timerHandler = (secondsPassed) => {
         timerMinutes++
         timerSeconds = 0
     }
-
     if (Math.round(timerSeconds) <= 9 ) {
         secondToPrint = '0' + Math.round(timerSeconds)
     } else {
         secondToPrint = Math.round(timerSeconds)
     }
-
     if (timerMinutes <= 9) {
         minuteToPrint = '0' + timerMinutes
     } else {
         minuteToPrint = timerMinutes
     }
         timer.innerHTML = ': ' + minuteToPrint +':' + secondToPrint
-
 }
 
 const winCase = () => {
