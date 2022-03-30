@@ -64,7 +64,7 @@ export default class Ball {
         }
         // part for checking paddle
         if (this.checkPaddle(ballObj, paddleObj)) {
-            if(ballObj.y + ballObj.height + 50 > ballObj.y){ 
+            if(ballObj.y + ballObj.height + 50 > paddleObj.y){ 
                 if(ballObj.x + ballObj.width - ballObj.x < 20) {     // ball on the left side of paddle
                     this.cx -= 20
                     this.direction.cx *= -1 
